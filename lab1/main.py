@@ -1,6 +1,7 @@
 import regularized_values
 import estimate_T
 import estimate_e
+from harris import orientation_tensor, harris
 from interpolation import init_interpolation
 from interpolation import interpolate
 import numpy as np
@@ -85,8 +86,15 @@ while np.linalg.norm(d) > 0.0001 and counter < 10:
 
     counter = counter + 1
 
-plt.figure(1)
-plt.imshow(Ig)
-plt.figure(2)
-plt.imshow(Jg_interpolated)
+#plt.figure(1)
+#plt.imshow(Ig)
+#plt.figure(2)
+#plt.imshow(Jg_interpolated)
+#plt.show()
+
+T_field = orientation_tensor(I, 17, 2.0, 17, 2.0)
+
+plt.imshow(T_field[:,:,1,1], cmap="gray")
+print(T_field[:,:,1,1].shape)
+print(I.shape)
 plt.show()
