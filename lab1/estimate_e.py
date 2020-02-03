@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 def estimate_e(Ig, Jg, Jgdx, Jgdy, x, y, window_size):
 
-    e = np.zeros((window_size[1], window_size[0], 2))
+    e = np.zeros((2, 1))
 
     Jgdx_windowed = Jgdx[x-(window_size[1]//2):(x+(window_size[1]//2)),
                          y - (window_size[0]//2):y + (window_size[0]//2)]
@@ -21,8 +21,8 @@ def estimate_e(Ig, Jg, Jgdx, Jgdy, x, y, window_size):
 
     diff = Ig_windowed - Jg_windowed
 
-    e[:, :, 0] = diff * Jgdx_windowed
-    e[:, :, 1] = diff * Jgdy_windowed
+    e[0, 0] = np.sum(diff * Jgdx_windowed)
+    e[1, 0] = np.sum(diff * Jgdy_windowed)
 
     return e
 
