@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.signal import convolve2d as conv2
+import scipy
 from matplotlib import pyplot as plt
 
 def orientation_tensor(img, gradksize, gradsigma, ksize, sigma):
@@ -17,7 +18,7 @@ def orientation_tensor(img, gradksize, gradsigma, ksize, sigma):
     img_dx = conv2(conv2(img, df, mode='same'), lp.T, mode='same')
     img_dy = conv2(conv2(img, lp, mode='same'), df.T, mode='same')
 
-    T_field = np.zeros((img.shape[1], img.shape[0], 2, 2))
+    T_field = np.zeros((img.shape[0], img.shape[1], 2, 2))
 
     T_field[:, :, 0, 0] = (img_dx*img_dx)
     T_field[:, :, 0, 1] = (img_dx*img_dy)
@@ -27,7 +28,7 @@ def orientation_tensor(img, gradksize, gradsigma, ksize, sigma):
     lp = np.atleast_2d(np.exp(-0.5 * (np.arange(-gradksize//2, gradksize//2 + 1, 1)/gradsigma)**2))
     lp = lp/np.sum(lp)
 
-    Tlp = np.zeros((img.shape[1], img.shape[0], 2, 2))
+    Tlp = np.zeros((img.shape[0], img.shape[1], 2, 2))
 
     Tlp[:,:,0, 0] = conv2(conv2(T_field[:,:,0,0], lp, mode='same'), lp.T, mode='same')
     Tlp[:,:,0, 1] = conv2(conv2(T_field[:,:,0,1], lp, mode='same'), lp.T, mode='same')
@@ -39,8 +40,6 @@ def orientation_tensor(img, gradksize, gradsigma, ksize, sigma):
 def harris(T_field, k):
     det = np.linalg.det(T_field)
 
-    print("DET", np.max(det))
-
     trace = T_field[:, :, 0, 0] + T_field[:, :, 1, 1]
 
     #print("TRACE", trace)
@@ -51,3 +50,13 @@ def harris(T_field, k):
 
     # k => .04 - .06
     return R
+
+def non_max_suppression(harris_response, domain):
+    domain = np.ones(domain)
+    order = 24
+    img_maxes = scipy.signal.order_filter(harris_response, domain, order)
+    out = np.zeros_like(harris_response)
+    mask = (harris_response == img_maxes)
+    out[mask] = harris_response[mask]
+
+    return out

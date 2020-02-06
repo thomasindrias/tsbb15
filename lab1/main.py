@@ -10,20 +10,44 @@ from scipy import ndimage
 from matplotlib import pyplot as plt
 from scipy.interpolate import RectBivariateSpline
 import PIL.Image
-import lab1
 
 def rgb_to_grayscale(I):
     G = 0.299*I[:, :, 0] + 0.587*I[:, :, 1] + 0.114*I[:, :, 2]
     return G
 
-I, J, (x,y) = lab1.get_cameraman()
+def load_lab_image(filename):
+    """Load a grayscale image by filename from the CVL image directory
+
+    Example:
+    >>> img = load_lab_image('cornertest.png')
+    """
+
+    return np.asarray(PIL.Image.open(filename).convert('L'))
+
+def get_cameraman():
+    "Return I, J and true (col, row) displacement"
+    n = 10 # Border crop
+    img = load_lab_image('cameraman.tif')
+    I = img[n:-n, n:-n]
+    x, y = 1, -2
+    J = img[n-y:-n-y, n-x:-n-x]
+    assert I.shape == J.shape
+    return I, J, (x, y)
+
+I, J, (x,y) = get_cameraman()
 
 d_true = [[x], [y]]
 w_size = [70, 40]
 
-(Ig, Jg, Jgdx, Jgdy) = regularized_values.regularized_values(I, J, 17, 3.0)
+(Ig, Jg, Jgdx, Jgdy) = regularized_values.regularized_values(I, J, 11, 2.0)
+
+#plt.imshow(Jgdx)
+#plt.show()
 
 T = estimate_T.estimate_T(Jgdx, Jgdy, 52, 114, w_size)
+
+plt.imshow(T)
+plt.show()
 e = estimate_e.estimate_e(Ig, Jg, Jgdx, Jgdy, 52, 114, w_size)
 
 # Find an appropiate value, d
