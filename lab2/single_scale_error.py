@@ -1,8 +1,8 @@
 import numpy as np
-from matplotlib import pyplot as plt
 
-
-def single_scale_error(I, J):
-    error = np.linalg.norm(I-J)
-    print("||J(x) - I(x)||", error)
-    return(error)
+def LK_errors(I, J, Jv):
+    error1 = np.linalg.norm(I-J)
+    error2 = np.linalg.norm(I-Jv)
+    print("||J(x) - I(x)||", error1)
+    print("||J(x + v) - I(x)||", error2)
+    return (error1, error2)

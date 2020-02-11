@@ -2,10 +2,8 @@ import numpy as np
 #from lk_tracker import lk_tracker
 from matplotlib import pyplot as plt
 import PIL.Image
-from scipy import ndimage
 from LK_equation import LK_equation
-from single_scale_error import single_scale_error
-import scipy
+from single_scale_error import LK_errors
 import lab2
 
 
@@ -29,17 +27,16 @@ def get_cameraman():
 
 (ds, interpolated_J) = LK_equation(I, J, 11, 2.0, [40, 70])
 
-plt.imshow(interpolated_J, cmap="gray")
+#plt.imshow(interpolated_J, cmap="gray")
+#plt.show()
+
+plt.imshow(ds[:, :, 0, 0])
 plt.show()
 
-err1 = single_scale_error(I, J)
-err2 = single_scale_error(I, interpolated_J)
+(err1, err2) = LK_errors(I, J, interpolated_J)
 
 lab2.gopimage(ds[:, :, :, 0])
 plt.show()
-
-print("||J(x) - I(x)||", err1)
-print("||J(x+v) - I(x)||", err2)
 
 '''
 plt.figure(1)
