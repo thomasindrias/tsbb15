@@ -15,7 +15,7 @@ def load_image_grayscale(path):
 I = load_image_grayscale('forwardL/forwardL0.png')
 J = load_image_grayscale('forwardL/forwardL1.png')
 
-ds, interpolated_J = LK_equation(I, J, 11, 2.0, [40, 70])
+ds, interpolated_J = LK_equation(I, J, 11, 1.0, [10, 10], True)
 
 plt.imshow(interpolated_J, cmap="gray")
 plt.show()

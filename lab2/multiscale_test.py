@@ -29,4 +29,3 @@ for n in range(n_scales, 2, -1):
     plt.show()
 
     (err1, err2) = LK_errors(I, J, Jn)
-
