@@ -25,16 +25,21 @@ def get_cameraman():
 
 (I, J) = get_cameraman()
 
-(ds, interpolated_J) = LK_equation(I, J, 11, 2.0, [40, 70])
+plt.figure(1)
+plt.imshow(I)
+
+
+(ds, interpolated_J) = LK_equation(I, J, 15, 1.6, [10, 10])
 
 #plt.imshow(interpolated_J, cmap="gray")
 #plt.show()
 
+plt.figure(2)
 plt.imshow(ds[:, :, 0, 0])
-plt.show()
 
 (err1, err2) = LK_errors(I, J, interpolated_J)
 
+plt.figure(3)
 lab2.gopimage(ds[:, :, :, 0])
 plt.show()
 
