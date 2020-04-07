@@ -1,0 +1,104 @@
+import lab3
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import signal
+
+# 1. Compute mean for whole RIGHT image
+# 2. Set uninteresting points to inf
+# 3. For each interesting point, take that value minus one of LEFT image interesting point
+# 4. Use joint min, return index
+
+def find_interest_points(im):
+    points = lab3.harris(im, 5, 5)
+    points = lab3.non_max_suppression(points, 5)
+
+    return points
+
+def window_point(x, y, im, w_size):
+    res = im[y-(w_size//2):y+(w_size//2), x-(w_size//2):x+(w_size//2)]    
+    
+    return res
+
+def find_corr(im1, im2, ip_ind1, ip_ind2):
+    #score_matrix = np.inf * np.ones((im1.shape[0], im1.shape[1]))
+    corr_1 = []
+    corr_2 = []
+
+    w_size = 3
+    box_filt = np.ones((w_size, w_size)) / (w_size*w_size)
+    
+    img1_mean = signal.convolve2d(im1, box_filt, mode='same')
+    (rows1, cols1) = ip_ind1
+    
+    img2_mean = signal.convolve2d(im2, box_filt, mode='same')
+    (rows2, cols2) = ip_ind2
+    
+
+    for i in range(len(rows1)):
+        min_err = np.inf
+        min_row = -1
+        min_col = -1
+
+        for j in range(len(rows2)):
+            print(j)
+            im1_window = window_point(cols1[i], rows1[i], im1, 25)
+            im2_window = window_point(cols2[j], rows2[j], im2, 25)
+
+            if im1_window.shape[0] == 24 and im1_window.shape[1] == 24 and im2_window.shape[0] == 24 and im2_window.shape[1] == 24:
+                err = np.sum(np.power(im2_window - im1_window, 2))
+
+                if err < min_err:
+                    min_err = err
+                    min_row = rows2[j]
+                    min_col = cols2[j]
+
+        if min_err < 1000000000:
+            corr_1.append([cols1[i], rows1[i]])
+            corr_2.append([cols2[min_col], rows2[min_row]])
+
+        '''
+        img1_val = img1_mean[rows[i], cols[i]]
+        
+        diff = np.abs(img2_mean - img1_val)
+        diff[ip_ind2] = np.inf
+        
+        min_diff = np.min(diff)
+        print("MIN DIFF", min_diff)
+        if min_diff < 1:
+            (A, B) = np.unravel_index(np.argmin(diff, axis=None), diff.shape)
+
+            corr_1.append([cols[i], rows[i]])
+            corr_2.append([B, A])
+        '''
+    return (corr_1, corr_2)
+
+plt.set_cmap("gray")
+
+
+[im1, im2] = lab3.load_stereo_pair()
+
+
+
+ip1 = find_interest_points(im1)
+ip2 = find_interest_points(im2)
+
+ip_ind1 = np.where(ip1 > 0.1)
+(rows1, cols1) = ip_ind1
+ip_ind2 = np.where(ip2 > 0.1)
+(rows2, cols2) = ip_ind2
+
+(corr1, corr2) = find_corr(im1, im2, ip_ind1, ip_ind2)
+
+a = corr1[0][0]
+b = corr1[0][1]
+print(im1[a, b])
+
+a = corr2[0][0]
+b = corr2[0][1]
+print(im2[a, b])
+
+corr1 = np.asarray(corr1).T
+corr2 = np.asarray(corr2).T
+
+#lab3.show_corresp(im1, im2, corr1, corr2)
+#plt.show()
