@@ -53,9 +53,9 @@ def load_stereo_pair():
     img2: np.ndarray
         Second image in pair
     """
-    pair = 'img'
+    pair = 'dino'
     return [
-        load_image_grayscale(LAB3_IMAGE_DIRECTORY / f'{pair}{i}.png') 
+        load_image_grayscale(LAB3_IMAGE_DIRECTORY / f'{pair}{i}.ppm') 
         for i in (1, 2)
     ]
 

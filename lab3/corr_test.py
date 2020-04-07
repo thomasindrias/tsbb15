@@ -3,6 +3,7 @@ from part4 import get_corr
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import signal
+import random
 
 plt.set_cmap("gray")
 

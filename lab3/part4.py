@@ -60,7 +60,7 @@ def get_corr(im1, im2):
     corr1 = np.asarray(corr1).T
     corr2 = np.asarray(corr2).T
 
-    lab3.show_corresp(im1, im2, corr1, corr2)
-    plt.show()
+    #lab3.show_corresp(im1, im2, corr1, corr2)
+    #plt.show()
     
     return(corr1, corr2)
