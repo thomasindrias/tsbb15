@@ -14,7 +14,7 @@ def find_interest_points(im):
 
     return points
 
-def find_corr(ip_ind1, ip_ind2, rois1, rois2):
+def calculate_corr(ip_ind1, ip_ind2, rois1, rois2):
     (ip_ind1_rows, ip_ind1_cols) = ip_ind1
     (ip_ind2_rows, ip_ind2_cols) = ip_ind2
     len1 = len(ip_ind1_rows)
@@ -47,15 +47,15 @@ def get_corr(im1, im2):
     ip1 = find_interest_points(im1)
     ip2 = find_interest_points(im2)
 
-    ip_ind1 = np.where(ip1 > 0.03)
+    ip_ind1 = np.where(ip1 > 0.005)
     (rows1, cols1) = ip_ind1
-    ip_ind2 = np.where(ip2 > 0.03)
+    ip_ind2 = np.where(ip2 > 0.005)
     (rows2, cols2) = ip_ind2
 
     rois1 = lab3.cut_out_rois(im1, cols1, rows1, 7)
     rois2 = lab3.cut_out_rois(im2, cols2, rows2, 7)
 
-    (corr1, corr2) = find_corr(ip_ind1, ip_ind2, rois1, rois2)
+    (corr1, corr2) = calculate_corr(ip_ind1, ip_ind2, rois1, rois2)
 
     corr1 = np.asarray(corr1).T
     corr2 = np.asarray(corr2).T
