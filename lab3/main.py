@@ -30,7 +30,7 @@ best_std = np.inf
 
 print("Total points: ", corr1.shape[1])
 
-for i in range(10000):
+for i in range(2000):
     random_index = random.sample(range(corr1.shape[1]), 8)
 
     corr1_rand = corr1[:, random_index]
@@ -40,7 +40,7 @@ for i in range(10000):
 
     d = lab3.fmatrix_residuals(F, corr1, corr2)
 
-    thresh = 0.5
+    thresh = 1
     inlier_count = 0
 
     for j in range(d.shape[1]):
@@ -61,13 +61,18 @@ inlier_ratio = best_inlier_count / d.shape[1]
 
 print("INLIER RATIO", inlier_ratio)
 
+lab3.show_corresp(im1, im2, corr1, corr2)
+plt.show()
+
 lab3.show_corresp(im1, im2, best_corr1, best_corr2)
 plt.show()
 
 plt.figure(1)
-lab3.plot_eplines(best_F, corr2, (im1.shape[1], im1.shape[0]))
+plt.imshow(im1)
+lab3.plot_eplines(best_F, best_corr2, (im1.shape[1], im1.shape[0]))
 
 plt.figure(2)
-lab3.plot_eplines(best_F.T, corr1, (im2.shape[1], im2.shape[0]))
+plt.imshow(im2)
+lab3.plot_eplines(best_F.T, best_corr1, (im2.shape[1], im2.shape[0]))
 
 plt.show()

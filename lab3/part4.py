@@ -10,7 +10,7 @@ from scipy import signal
 
 def find_interest_points(im):
     points = lab3.harris(im, 5, 5)
-    points = lab3.non_max_suppression(points, 5)
+    points = lab3.non_max_suppression(points, 3)
 
     return points
 
@@ -47,9 +47,9 @@ def get_corr(im1, im2):
     ip1 = find_interest_points(im1)
     ip2 = find_interest_points(im2)
 
-    ip_ind1 = np.where(ip1 > 0.005)
+    ip_ind1 = np.where(ip1 > 0.002)
     (rows1, cols1) = ip_ind1
-    ip_ind2 = np.where(ip2 > 0.005)
+    ip_ind2 = np.where(ip2 > 0.002)
     (rows2, cols2) = ip_ind2
 
     rois1 = lab3.cut_out_rois(im1, cols1, rows1, 7)
