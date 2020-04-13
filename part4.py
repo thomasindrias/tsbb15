@@ -8,13 +8,11 @@ from scipy import signal
 # 3. For each interesting point, take that value minus one of LEFT image interesting point
 # 4. Use joint min, return index
 
-
 def find_interest_points(im):
-    points = lab3.harris(im, 5, 5)
-    points = lab3.non_max_suppression(points, 3)
+    points = lab3.harris(im, 7, 3)
+    points = lab3.non_max_suppression(points, 7)
 
     return points
-
 
 def calculate_corr(ip_ind1, ip_ind2, rois1, rois2):
     (ip_ind1_rows, ip_ind1_cols) = ip_ind1
@@ -25,19 +23,22 @@ def calculate_corr(ip_ind1, ip_ind2, rois1, rois2):
 
     corr1 = []
     corr2 = []
-
+    
     for row in range(len1):
         rois1_row = rois1[row]
         for col in range(len2):
             rois2_col = rois2[col]
-            error = np.sum(np.power(rois1_row-rois2_col, 2))
-
+            if rois1_row.shape[0] == rois2_col.shape[0] and rois1_row.shape[1] == rois2_col.shape[1]:
+                error = np.sum(np.power(rois1_row-rois2_col, 2))
+            else:
+                error = np.inf
+            
             match_matrix[row, col] = error
 
     (vals, ri, ci) = lab3.joint_min(match_matrix)
 
     for i, val in enumerate(vals):
-        if val < 3000:
+        if val < 2500:
             a = ri[i]
             b = ci[i]
             corr1.append([ip_ind1_cols[a], ip_ind1_rows[a]])
@@ -45,14 +46,13 @@ def calculate_corr(ip_ind1, ip_ind2, rois1, rois2):
 
     return (corr1, corr2)
 
-
 def get_corr(im1, im2):
     ip1 = find_interest_points(im1)
     ip2 = find_interest_points(im2)
 
-    ip_ind1 = np.where(ip1 > 0.002)
+    ip_ind1 = np.where(ip1 > 0.00008)
     (rows1, cols1) = ip_ind1
-    ip_ind2 = np.where(ip2 > 0.002)
+    ip_ind2 = np.where(ip2 > 0.00008)
     (rows2, cols2) = ip_ind2
 
     rois1 = lab3.cut_out_rois(im1, cols1, rows1, 7)
@@ -64,6 +64,6 @@ def get_corr(im1, im2):
     corr2 = np.asarray(corr2).T
 
     #lab3.show_corresp(im1, im2, corr1, corr2)
-    # plt.show()
-
+    #plt.show()
+    
     return(corr1, corr2)
