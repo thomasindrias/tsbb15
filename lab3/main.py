@@ -27,6 +27,7 @@ plt.set_cmap("gray")
 
 print("Total points: ", corr1.shape[1])
 
+# RANSAC
 (best_corr1, best_corr2, best_F) = ransac(corr1, corr2, 2000)
 
 lab3.show_corresp(im1, im2, corr1, corr2)
@@ -44,3 +45,4 @@ plt.imshow(im2)
 lab3.plot_eplines(best_F.T, best_corr1, (im2.shape[1], im2.shape[0]))
 
 plt.show()
+
