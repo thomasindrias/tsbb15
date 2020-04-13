@@ -1,0 +1,38 @@
+2
+-Use Harris detector to find points.
+-Image patch intensity matching
+There are 8 unknown variables in transformation matrix so we need n >= 8.
+
+3
+We must be able to find corresponding points between the two images.
+
+4.1
+Use SIFT to find correspondences.
++ It's more accurate than many other descriptors
++ Scale and rotation invariant
+- SIFT is more mathematically complicated and computationally heavy
+
+4.2
+Calculates the distances between the epipolar lines and the supplied points.
+
+4.3
+Done on code
+
+4.4
+value of 1.0
+
+4.5
+2000 iterations.
+
+5.1
+Done on code
+
+5.2
+Yes, most of the times the epipolar lines on image 1 stay on the same features in image 2.
+
+5.3
+With our current iterations used in ransac, Gold-Standard algorithm is much faster
+(about 41 times).
+
+6.
+Show output from code
