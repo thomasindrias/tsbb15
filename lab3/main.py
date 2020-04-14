@@ -43,7 +43,7 @@ plt.show()
 # GOLD STANDARD
 start = time.time()
 
-(gs_corr1, gs_corr2, gs_F) = gold_standard(best_corr1, best_corr2)
+(gs_corr1, gs_corr2, gs_F) = gold_standard(best_corr1, best_corr2, best_F)
 
 end = time.time()
 gs_time = end-start
