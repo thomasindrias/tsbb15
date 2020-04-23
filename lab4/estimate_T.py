@@ -10,10 +10,6 @@ def estimate_T(img, gradksize, gradsigma, ksize, sigma):
     )
     lp = lp / np.sum(lp)
 
-    lp2d = conv2(lp, np.transpose(lp))
-
-    img = conv2(img, lp2d, mode="same")
-
     df = np.atleast_2d(
         -1.0 / np.square(sigma) * np.arange(-ksize // 2, ksize // 2 + 1, 1) * lp
     )
