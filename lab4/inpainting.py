@@ -10,17 +10,24 @@ plt.set_cmap("gray")
 
 
 def inpainting():
-    ksize = 4
+    ksize = 8
     sigma = 1
-    gradksize = 4
+    gradksize = 8
     gradsigma = 1
 
     alpha = 0.5
     lambda_ = 0.15
 
     im = lab4.get_cameraman()
-    mask = (np.random.rand(im.shape[0], im.shape[1]) > 0.1) * 1.0
-    g = im * mask
+
+    #mask = (np.random.rand(im.shape[0], im.shape[1]) > 0.1) * 1.0
+    #g = im * mask
+
+    mask = np.zeros((im.shape[0]*2, im.shape[1]*2))
+    mask[0:-1:2, 0:-1:2] = 1
+    
+    g = np.zeros((im.shape[0]*2, im.shape[1]*2))
+    g[0:-1:2, 0:-1:2] = im
     u = g
 
     ax1 = plt.subplot(111)
