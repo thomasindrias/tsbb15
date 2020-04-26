@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.signal import convolve2d as conv2
 from scipy import signal
-from matplotlib import pyplot as pl
+from matplotlib import pyplot as plt
 
 
 def estimate_T(img, gradksize, gradsigma, ksize, sigma):

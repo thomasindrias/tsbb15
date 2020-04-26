@@ -1,8 +1,9 @@
 import lab4
+from add_noise import add_noise
 from estimate_T import estimate_T
 from estimate_D import estimate_D
 from get_HL import get_HL
-from regularized_values import regularized_values
+from add_noise import add_noise
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 import scipy.io as sio
@@ -11,6 +12,8 @@ import numpy as np
 plt.set_cmap("gray")
 
 # Algorithm Parameters
+
+
 def diffusion():
     s = 0.2
     m = 0.3
@@ -22,8 +25,7 @@ def diffusion():
     gradsigma = 1.5
 
     L = lab4.get_cameraman()
-    gaussian = np.random.normal(0, 10, (L.shape[0], L.shape[1]))
-    L = L + gaussian
+    L = add_noise(L, 10)
 
     # L = lab4.make_circle(128, 128, 120) * 255
     # gaussian = np.random.normal(0, 10, (L.shape[0], L.shape[1]))
