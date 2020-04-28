@@ -20,12 +20,12 @@ def inpainting():
 
     im = lab4.get_cameraman()
 
-    #mask = (np.random.rand(im.shape[0], im.shape[1]) > 0.1) * 1.0
-    #g = im * mask
+    # mask = (np.random.rand(im.shape[0], im.shape[1]) > 0.1) * 1.0
+    # g = im * mask
 
     mask = np.zeros((im.shape[0]*2, im.shape[1]*2))
     mask[0:-1:2, 0:-1:2] = 1
-    
+
     g = np.zeros((im.shape[0]*2, im.shape[1]*2))
     g[0:-1:2, 0:-1:2] = im
     u = g
@@ -71,5 +71,6 @@ def inpainting():
         init_func=init_func,
     )
     plt.show()
+
 
 inpainting()
